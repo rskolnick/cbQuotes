@@ -44,7 +44,7 @@ export default function AddDealerPage() {
                                 <Input
                                     id="storeName"
                                     placeholder="Name of Dealer"
-                                    className="bg-slate-200 rounded-[8px] placeholder:text-slate-500"
+                                    className=""
                                 ></Input>
                             </div>
                             <div className="flex flex-col space-y-1.5">
@@ -57,7 +57,7 @@ export default function AddDealerPage() {
                                 <Input
                                     id="address"
                                     placeholder="Main Address"
-                                    className="bg-slate-200 rounded-[8px] placeholder:text-slate-500"
+                                    className=""
                                 ></Input>
                             </div>
                             <div className="flex flex-col space-y-1.5">
@@ -70,7 +70,7 @@ export default function AddDealerPage() {
                                 <Input
                                     id="email"
                                     placeholder="Email Address"
-                                    className="bg-slate-200 rounded-[8px] placeholder:text-slate-500"
+                                    className=""
                                 ></Input>
                             </div>
                             <div className="flex flex-col space-y-1.5">
@@ -83,7 +83,7 @@ export default function AddDealerPage() {
                                 <Input
                                     id="discount"
                                     defaultValue={0.5}
-                                    className="bg-slate-200 rounded-[8px] placeholder:text-slate-500"
+                                    className=""
                                 ></Input>
                             </div>
                         </div>
@@ -92,7 +92,7 @@ export default function AddDealerPage() {
                 <CardFooter className="flex justify-center">
                     {/* TODO: set up onClick to send form info to API point /api/dealer */}
                     <Button
-                        className="bg-slate-800 rounded-[8px] w-full text-lg text-slate-100 py-6 hover:bg-slate-800/80"
+                        className="w-full text-xl"
                         onClick={() => {
                             return toast({
                                 title: 'Cannot post at this time',
