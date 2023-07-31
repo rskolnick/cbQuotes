@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
+import { toast } from '@/hooks/use-toast';
 
 export default function AddDealerPage() {
     const router = useRouter();
@@ -92,7 +93,13 @@ export default function AddDealerPage() {
                     {/* TODO: set up onClick to send form info to API point /api/dealer */}
                     <Button
                         className="bg-slate-800 rounded-[8px] w-full text-lg text-slate-100 py-6 hover:bg-slate-800/80"
-                        onClick={() => router.push('/')}
+                        onClick={() => {
+                            return toast({
+                                title: 'Cannot post at this time',
+                                description: 'Please try again later.',
+                                variant: 'destructive',
+                            });
+                        }}
                     >
                         Create Dealer
                     </Button>
