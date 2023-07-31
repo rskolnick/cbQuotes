@@ -56,7 +56,7 @@ model Dealer {
   storeName String  @unique
   address   String?
   email     String?
-  discount  Float
+  discount  Float   @default(0.5)
   quotes    Quote[]
 }
 
