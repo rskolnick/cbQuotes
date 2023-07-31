@@ -50,3 +50,42 @@ model User {
   accounts Account[]
   sessions Session[]
 }
+
+model Dealer {
+  id        String  @id @default(cuid())
+  storeName String  @unique
+  address   String?
+  email     String?
+  discount  Float
+  quotes    Quote[]
+}
+
+model Quote {
+  id       String    @id @default(cuid())
+  dealer   Dealer    @relation(fields: [dealerId], references: [id])
+  dealerId String
+  products Product[]
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  productName String  @unique
+  msrp        Float
+  quotes      Quote[]
+  parts       Part[]
+}
+
+enum StyleChoice {
+  MODERN
+  SHAKER
+  WOODGRAIN
+}
+
+model Part {
+  id       String       @id @default(cuid())
+  name     String       @unique
+  cost     Float
+  hasColor Boolean
+  style    StyleChoice? @default(MODERN)
+  products Product[]
+}
