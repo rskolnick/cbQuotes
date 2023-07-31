@@ -3,7 +3,7 @@ import Link from 'next/link';
 export default function Navbar() {
     return (
         <nav className="sticky top-0 flex items-center justify-between h-20 border-b border-gray-400 dark:border-slate-400 dark:text-white/90 px-4">
-            <div className="w-full bg-emerald-300">
+            <div className="w-full">
                 <Link href="/" className="text-xl sm:text-3xl">
                     Casa Bella Quotes
                 </Link>
