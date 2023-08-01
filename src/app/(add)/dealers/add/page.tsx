@@ -78,6 +78,7 @@ export default function AddDealerPage() {
         },
         onSuccess: () => {
             router.push('/dealers');
+            router.refresh();
         },
     });
 
