@@ -1,16 +1,19 @@
 import { db } from '@/lib/db';
+import { columns } from '@/components/Columns';
+import { DataTable } from '@/components/DataTable';
+
+async function getData() {
+    const dealerList = await db.dealer.findMany();
+
+    return dealerList;
+}
 
 export default async function page() {
-    const dealers = await db.dealer.count();
-    const dealer = await db.dealer.findFirst();
+    const data = await getData();
 
     return (
-        <div>
-            <h1>Number of Dealers: {dealers}</h1>
-            <p>{dealer?.storeName}</p>
-            <p>{dealer?.address}</p>
-            <p>{dealer?.email}</p>
-            <p>{dealer?.discount}</p>
+        <div className="container mx-auto py-10">
+            <DataTable columns={columns} data={data} />
         </div>
     );
 }
