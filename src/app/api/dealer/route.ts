@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 
         if (dealerExists) {
             return new Response('Dealer already exists in database', {
-                status: 400,
+                status: 409,
             });
         }
 

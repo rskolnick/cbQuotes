@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 
 import Navbar from '@/components/Navbar';
 import { Toaster } from '@/components/ui/toaster';
+import Providers from '@/components/Providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,9 +28,11 @@ export default function RootLayout({
             )}
         >
             <body className="min-h-screen pt-12 bg-slate-50 antialiased">
-                <Navbar />
-                {children}
-                <Toaster />
+                <Providers>
+                    <Navbar />
+                    {children}
+                    <Toaster />
+                </Providers>
             </body>
         </html>
     );

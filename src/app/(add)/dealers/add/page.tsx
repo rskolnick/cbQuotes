@@ -14,9 +14,73 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
+import { useMutation } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
+import { ChangeEvent, useState } from 'react';
 
 export default function AddDealerPage() {
+    const [storeName, setStoreName] = useState('');
+    const [address, setAddress] = useState('');
+    const [email, setEmail] = useState('');
+    const [discount, setDiscount] = useState('0.5');
+
     const router = useRouter();
+
+    const { mutate: createDealer, isLoading } = useMutation({
+        mutationFn: async () => {
+            const discountIsNum = /^[0-9.]*$/.test(discount);
+
+            if (!discountIsNum) {
+                return toast({
+                    title: 'Discount Not a Number',
+                    description:
+                        'The value you entered for discount contains more than just a number and a period',
+                    variant: 'destructive',
+                });
+            }
+
+            const payload = {
+                storeName,
+                address,
+                email,
+                discount: parseFloat(discount),
+            };
+
+            const { data } = await axios.post('/api/dealer', payload);
+
+            return data as string;
+        },
+        onError: (err) => {
+            if (err instanceof AxiosError) {
+                if (err.response?.status === 409) {
+                    return toast({
+                        title: 'Dealer Already Exists',
+                        description: 'Dealer is already in the database!',
+                        variant: 'destructive',
+                    });
+                }
+
+                if (err.response?.status === 422) {
+                    return toast({
+                        title: 'Invalid Form Data',
+                        description: 'Is your dealer discount a number?',
+                        variant: 'destructive',
+                    });
+                }
+
+                // TODO: Write logic for if user is not logged in
+            }
+            toast({
+                title: 'Error Creating Dealer',
+                description: 'Unknown error, try again later',
+                variant: 'destructive',
+            });
+        },
+        onSuccess: () => {
+            router.push('/dealers');
+        },
+    });
+
     return (
         <div className="flex justify-center items-center h-screen">
             <Card className="bg-blue-300 text-slate-800/90 w-[500px] rounded-xl">
@@ -44,7 +108,10 @@ export default function AddDealerPage() {
                                 <Input
                                     id="storeName"
                                     placeholder="Name of Dealer"
-                                    className=""
+                                    value={storeName}
+                                    onChange={(e) =>
+                                        setStoreName(e.target.value)
+                                    }
                                 ></Input>
                             </div>
                             <div className="flex flex-col space-y-1.5">
@@ -57,7 +124,8 @@ export default function AddDealerPage() {
                                 <Input
                                     id="address"
                                     placeholder="Main Address"
-                                    className=""
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
                                 ></Input>
                             </div>
                             <div className="flex flex-col space-y-1.5">
@@ -70,7 +138,8 @@ export default function AddDealerPage() {
                                 <Input
                                     id="email"
                                     placeholder="Email Address"
-                                    className=""
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 ></Input>
                             </div>
                             <div className="flex flex-col space-y-1.5">
@@ -82,8 +151,10 @@ export default function AddDealerPage() {
                                 </Label>
                                 <Input
                                     id="discount"
-                                    defaultValue={0.5}
-                                    className=""
+                                    value={discount}
+                                    onChange={(e) =>
+                                        setDiscount(e.target.value)
+                                    }
                                 ></Input>
                             </div>
                         </div>
@@ -92,13 +163,10 @@ export default function AddDealerPage() {
                 <CardFooter className="flex justify-center">
                     {/* TODO: set up onClick to send form info to API point /api/dealer */}
                     <Button
+                        isLoading={isLoading}
                         className="w-full text-xl"
                         onClick={() => {
-                            return toast({
-                                title: 'Cannot post at this time',
-                                description: 'Please try again later.',
-                                variant: 'destructive',
-                            });
+                            createDealer();
                         }}
                     >
                         Create Dealer
