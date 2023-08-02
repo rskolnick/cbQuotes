@@ -1,9 +1,18 @@
 import { db } from '@/lib/db';
 import { columns } from '@/components/Columns';
 import { DataTable } from '@/components/DataTable';
+import Link from 'next/link';
 
 async function getData() {
-    const dealerList = await db.dealer.findMany();
+    const dealerList = await db.dealer.findMany({
+        include: {
+            _count: {
+                select: {
+                    quotes: true,
+                },
+            },
+        },
+    });
 
     return dealerList;
 }
