@@ -41,3 +41,43 @@ export async function POST(req: Request) {
         });
     }
 }
+
+export async function PUT(req: Request) {
+    try {
+        // TODO: check if poster is logged in, if not throw error
+        const body = await req.json();
+        const { storeName, address, email, discount } =
+            DealerPostValidator.parse(body);
+        const dealerExists = await db.dealer.findFirst({
+            where: {
+                storeName,
+            },
+        });
+
+        if (!dealerExists) {
+            return new Response('Please only edit an existing dealer', {
+                status: 409,
+            });
+        }
+
+        await db.dealer.update({
+            where: {
+                storeName,
+            },
+            data: {
+                address,
+                email,
+                discount,
+            },
+        });
+
+        return new Response('OK');
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            return new Response('Invalid request data passed', { status: 422 });
+        }
+        return new Response('Could not edit the dealer. Try again later.', {
+            status: 500,
+        });
+    }
+}
