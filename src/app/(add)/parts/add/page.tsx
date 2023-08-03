@@ -13,19 +13,80 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@radix-ui/react-label';
 import { Separator } from '@radix-ui/react-separator';
 import { ChangeEvent, useState } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { toast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 
 export default function AddPartsPage() {
     const [partName, setPartName] = useState('');
     const [cost, setCost] = useState('0');
     const [hasColor, setHasColor] = useState(false);
-    const [style, setStyle] = useState('NONE');
+
+    const router = useRouter();
+
+    const { mutate: createPart, isLoading } = useMutation({
+        mutationFn: async () => {
+            const costIsNum = /^[0-9.]*$/.test(cost);
+
+            if (!costIsNum) {
+                return toast({
+                    title: 'Cost Not a Number',
+                    description:
+                        'The value you entered for cost contains more than just a number and a period',
+                    variant: 'destructive',
+                });
+            }
+
+            const payload = {
+                partName,
+                cost: parseInt(cost),
+                hasColor,
+            };
+
+            const { data } = await axios.post('/api/part', payload);
+
+            return data as string;
+        },
+        onError: (err) => {
+            if (err instanceof AxiosError) {
+                if (err.response?.status === 409) {
+                    return toast({
+                        title: 'Part Already Exists',
+                        description: 'Part is already in the database!',
+                        variant: 'destructive',
+                    });
+                }
+
+                if (err.response?.status === 422) {
+                    return toast({
+                        title: 'Invalid Form Data',
+                        description: 'Is your cost a number?',
+                        variant: 'destructive',
+                    });
+                }
+
+                // TODO: Write logic for if user is not logged in
+            }
+            toast({
+                title: 'Error Creating Dealer',
+                description: 'Unknown error, try again later',
+                variant: 'destructive',
+            });
+        },
+        onSuccess: () => {
+            router.push('/parts');
+            router.refresh();
+        },
+    });
 
     return (
         <div className="flex justify-center items-center h-screen">
             <Card className="bg-blue-300 text-slate-800/90 w-[500px] rounded-xl">
                 <CardHeader>
                     <CardTitle className="flex text-3xl justify-center">
-                        Add a Part
+                        Create a Part
                     </CardTitle>
                     <CardDescription className="text-slate-500 flex justify-center">
                         Add a new part.
@@ -47,7 +108,7 @@ export default function AddPartsPage() {
                                 <Input
                                     id="partName"
                                     placeholder="Name of Part"
-                                    value={}
+                                    value={partName}
                                     onChange={(e) =>
                                         setPartName(e.target.value)
                                     }
@@ -60,6 +121,7 @@ export default function AddPartsPage() {
                                 >
                                     Part Cost
                                 </Label>
+
                                 <Input
                                     id="cost"
                                     placeholder="Cost of Part"
@@ -74,41 +136,30 @@ export default function AddPartsPage() {
                                 >
                                     Color?
                                 </Label>
-                                <Input
-                                    id="hasColor"
-                                    placeholder="No"
-                                    value={hasColor}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                ></Input>
-                            </div>
-                            <div className="flex flex-col space-y-1.5">
-                                <Label
-                                    htmlFor="discount"
-                                    className="text-md font-semibold"
-                                >
-                                    Dealer Discount
-                                </Label>
-                                <Input
-                                    id="discount"
-                                    value={discount}
-                                    onChange={(e) =>
-                                        setDiscount(e.target.value)
-                                    }
-                                ></Input>
+                                <Checkbox
+                                    className="bg-white"
+                                    onClick={() => {
+                                        if (hasColor === true) {
+                                            setHasColor(false);
+                                        }
+                                        if (hasColor === false) {
+                                            setHasColor(true);
+                                        }
+                                    }}
+                                />
                             </div>
                         </div>
                     </form>
                 </CardContent>
                 <CardFooter className="flex justify-center">
-                    {/* TODO: set up onClick to send form info to API point /api/dealer */}
                     <Button
                         isLoading={isLoading}
                         className="w-full text-xl"
                         onClick={() => {
-                            createDealer();
+                            createPart();
                         }}
                     >
-                        Create Dealer
+                        Add Part
                     </Button>
                 </CardFooter>
             </Card>

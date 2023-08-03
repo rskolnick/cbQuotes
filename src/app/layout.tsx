@@ -27,7 +27,7 @@ export default function RootLayout({
                 'bg-white text-gray-900 antialiased'
             )}
         >
-            <body className="min-h-screen pt-12 bg-slate-50 antialiased">
+            <body className="min-h-screen bg-slate-50 antialiased">
                 <Providers>
                     <Navbar />
                     {children}
