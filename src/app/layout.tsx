@@ -1,13 +1,13 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Outfit } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
 import Navbar from '@/components/Navbar';
 import { Toaster } from '@/components/ui/toaster';
 import Providers from '@/components/Providers';
 
-const inter = Inter({ subsets: ['latin'] });
+const outfit = Outfit({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
     title: 'Casa Bella Quotes',
@@ -23,11 +23,11 @@ export default function RootLayout({
         <html
             lang="en"
             className={cn(
-                inter.className,
-                'bg-white text-gray-900 antialiased'
+                outfit.className,
+                'bg-white text-gray-900 subpixel-antialiased'
             )}
         >
-            <body className="min-h-screen bg-slate-50 antialiased">
+            <body className="min-h-screen bg-gradient-to-tr from-black via-indigo-900 to-black subpixel-antialiased text-slate-100">
                 <Providers>
                     <Navbar />
                     {children}

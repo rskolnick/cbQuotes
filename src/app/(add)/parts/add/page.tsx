@@ -41,7 +41,7 @@ export default function AddPartsPage() {
 
             const payload = {
                 partName,
-                cost: parseInt(cost),
+                cost: parseFloat(cost),
                 hasColor,
             };
 
