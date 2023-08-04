@@ -6,7 +6,7 @@ export default async function page() {
     const parts = await db.part.findMany();
 
     return (
-        <div className="flex justify-center items-center gap-x-6 flex-wrap h-[91.4vh]">
+        <div className="flex justify-center pt-6 items-center gap-x-6 gap-y-6 flex-wrap h-full">
             {parts.map((part) => (
                 <Link key={part.id} href={`/parts/${part.name}`}>
                     <div className="flex bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-blue-100 via-blue-300 to-blue-500 flex-col items-center rounded-lg w-48 h-80">

@@ -19,20 +19,19 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 
-export default function AddPartsPage() {
-    const [partName, setPartName] = useState('');
-    const [cost, setCost] = useState('0');
-    const [hasColor, setHasColor] = useState(false);
+export default function AddProductsPage() {
+    const [productName, setProductName] = useState('');
+    const [msrp, setMSRP] = useState('0');
 
     const router = useRouter();
 
-    const { mutate: createPart, isLoading } = useMutation({
+    const { mutate: createProduct, isLoading } = useMutation({
         mutationFn: async () => {
-            const costIsNum = /^[0-9.]*$/.test(cost);
+            const msrpIsNum = /^[0-9.]*$/.test(msrp);
 
-            if (!costIsNum) {
+            if (!msrpIsNum) {
                 return toast({
-                    title: 'Cost Not a Number',
+                    title: 'MSRP Not a Number',
                     description:
                         'The value you entered for cost contains more than just a number and a period',
                     variant: 'destructive',
@@ -40,12 +39,11 @@ export default function AddPartsPage() {
             }
 
             const payload = {
-                partName,
-                cost: parseFloat(cost),
-                hasColor,
+                productName,
+                msrp: parseFloat(msrp),
             };
 
-            const { data } = await axios.post('/api/part', payload);
+            const { data } = await axios.post('/api/product', payload);
 
             return data as string;
         },
@@ -53,8 +51,8 @@ export default function AddPartsPage() {
             if (err instanceof AxiosError) {
                 if (err.response?.status === 409) {
                     return toast({
-                        title: 'Part Already Exists',
-                        description: 'Part is already in the database!',
+                        title: 'Product Already Exists',
+                        description: 'Product is already in the database!',
                         variant: 'destructive',
                     });
                 }
@@ -62,7 +60,7 @@ export default function AddPartsPage() {
                 if (err.response?.status === 422) {
                     return toast({
                         title: 'Invalid Form Data',
-                        description: 'Is your cost a number?',
+                        description: 'Is your MSRP a number?',
                         variant: 'destructive',
                     });
                 }
@@ -70,13 +68,13 @@ export default function AddPartsPage() {
                 // TODO: Write logic for if user is not logged in
             }
             toast({
-                title: 'Error Creating Part',
+                title: 'Error Creating Product',
                 description: 'Unknown error, try again later',
                 variant: 'destructive',
             });
         },
         onSuccess: () => {
-            router.push('/parts');
+            router.push('/products');
             router.refresh();
         },
     });
@@ -86,10 +84,10 @@ export default function AddPartsPage() {
             <Card className="bg-blue-300 text-slate-800/90 w-[500px] rounded-xl">
                 <CardHeader>
                     <CardTitle className="flex text-3xl justify-center">
-                        Create a Part
+                        Create a Product
                     </CardTitle>
                     <CardDescription className="text-slate-500 flex justify-center">
-                        Add a new part.
+                        Add a new product, then add parts to it.
                     </CardDescription>
                 </CardHeader>
                 <div className="flex justify-center">
@@ -100,53 +98,34 @@ export default function AddPartsPage() {
                         <div className="grid w-full items-center gap-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label
-                                    htmlFor="partName"
+                                    htmlFor="productName"
                                     className="text-md font-semibold"
                                 >
-                                    Part Name
+                                    Product Name
                                 </Label>
                                 <Input
-                                    id="partName"
-                                    placeholder="Name of Part"
-                                    value={partName}
+                                    id="productName"
+                                    placeholder="Name of Product"
+                                    value={productName}
                                     onChange={(e) =>
-                                        setPartName(e.target.value)
+                                        setProductName(e.target.value)
                                     }
                                 ></Input>
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label
-                                    htmlFor="cost"
+                                    htmlFor="msrp"
                                     className="text-md font-semibold"
                                 >
-                                    Part Cost
+                                    Product MSRP
                                 </Label>
 
                                 <Input
-                                    id="cost"
-                                    placeholder="Cost of Part"
-                                    value={cost}
-                                    onChange={(e) => setCost(e.target.value)}
+                                    id="msrp"
+                                    placeholder="MSRP of Product"
+                                    value={msrp}
+                                    onChange={(e) => setMSRP(e.target.value)}
                                 ></Input>
-                            </div>
-                            <div className="flex flex-col space-y-1.5">
-                                <Label
-                                    htmlFor="hasColor"
-                                    className="text-md font-semibold"
-                                >
-                                    Color?
-                                </Label>
-                                <Checkbox
-                                    className="bg-white"
-                                    onClick={() => {
-                                        if (hasColor === true) {
-                                            setHasColor(false);
-                                        }
-                                        if (hasColor === false) {
-                                            setHasColor(true);
-                                        }
-                                    }}
-                                />
                             </div>
                         </div>
                     </form>
@@ -156,10 +135,10 @@ export default function AddPartsPage() {
                         isLoading={isLoading}
                         className="w-full text-xl"
                         onClick={() => {
-                            createPart();
+                            createProduct();
                         }}
                     >
-                        Add Part
+                        Add Product
                     </Button>
                 </CardFooter>
             </Card>

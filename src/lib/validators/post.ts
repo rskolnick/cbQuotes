@@ -33,3 +33,13 @@ export const PartPostValidator = z.object({
         invalid_type_error: 'color must be either true or false',
     }),
 });
+
+export const ProductPostValidator = z.object({
+    productName: z
+        .string()
+        .min(3, { message: 'Product name must be longer than 3 characters' })
+        .max(128, {
+            message: 'Product name cannot be longer than 128 characters',
+        }),
+    msrp: z.number().nonnegative({ message: 'MSRP cannot be negative' }),
+});
