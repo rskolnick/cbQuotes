@@ -51,14 +51,14 @@ export default async function page({ params }: Props) {
                 <div>
                     {product?.parts.length ? (
                         <Link
-                            href={`/products/${product!.productName}/add-parts`}
+                            href={`/products/${product!.productName}/parts`}
                             className={buttonVariants()}
                         >
                             Edit Parts
                         </Link>
                     ) : (
                         <Link
-                            href={`/products/${product!.productName}/add-parts`}
+                            href={`/products/${product!.productName}/parts`}
                             className={buttonVariants()}
                         >
                             Add Parts
