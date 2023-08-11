@@ -41,6 +41,7 @@ export default async function ProductPartsPage({ params }: Props) {
         <div className="bg-slate-700 rounded-lg md:w-3/4 max-w-[80rem] p-10 m-auto mt-[5rem]">
             <h1 className="text-3xl ml-7 pb-4">{product.productName}</h1>
             <Separator className="bg-slate-500" />
+            {/* Need to sort the product parts table, and add pagination */}
             <ProductPartsTable productId={id} partsList={partsList} />
         </div>
     );
