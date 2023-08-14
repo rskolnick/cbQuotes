@@ -64,23 +64,35 @@ model Dealer {
 }
 
 model Quote {
-  id           String    @id @default(cuid())
+  id           String            @id @default(cuid())
   referenceNum String
-  dealer       Dealer    @relation(fields: [dealerId], references: [id])
+  dealer       Dealer            @relation(fields: [dealerId], references: [id])
   dealerId     String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  products     Product[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  products     ProductsOnQuote[]
 
   @@index([dealerId])
 }
 
 model Product {
-  id          String  @id @default(cuid())
-  productName String  @unique
+  id          String            @id @default(cuid())
+  productName String            @unique
   msrp        Float
-  quotes      Quote[]
+  quotes      ProductsOnQuote[]
   parts       Part[]
+}
+
+model ProductsOnQuote {
+  quote     Quote   @relation(fields: [quoteId], references: [id])
+  quoteId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int
+
+  @@id([quoteId, productId])
+  @@index([productId])
+  @@index([quoteId])
 }
 
 enum StyleChoice {
