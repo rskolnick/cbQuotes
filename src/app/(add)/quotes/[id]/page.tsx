@@ -44,18 +44,20 @@ export default async function page({ params }: Props) {
                 <Separator />
                 <section>
                     <div className="">
-                        {/* {quote.products.map((productOnQuote) => (
-                            <div key={productOnQuote.productId}>
-                                <p>{productOnQuote.quantity}</p>
-                                <p>
+                        {quote.products.map((productOnQuote) => (
+                            <div
+                                key={productOnQuote.productId}
+                                className="flex items-center justify-normal gap-6 flex-wrap text-lg"
+                            >
+                                <p className="font-semibold">
                                     {productOnQuote.product.productName}
                                 </p>
+                                <div className="flex items-center justify-center gap-6 text-slate-400">
+                                    <p>${productOnQuote.product.msrp}</p>
+                                    <p>x {productOnQuote.quantity}</p>
+                                </div>
                             </div>
-                        ))} */}
-                        <div>
-                            <p>Sample Product</p>
-                            <p>$299.00</p>
-                        </div>
+                        ))}
                     </div>
                 </section>
             </div>
