@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Button } from './ui/button';
 import { Check, ChevronsUpDown } from 'lucide-react';
+import { Input } from './ui/input';
 import {
     Command,
     CommandEmpty,
@@ -25,6 +26,7 @@ type Option = {
 export const SelectSearch = ({ ...props }) => {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState('');
+    const [refNum, setRefNum] = useState('');
 
     const { options } = props;
     const router = useRouter();
@@ -46,6 +48,7 @@ export const SelectSearch = ({ ...props }) => {
 
             const payload = {
                 id,
+                refNum,
             };
 
             const { data } = await axios.post('/api/quotes/add', payload);
@@ -65,6 +68,7 @@ export const SelectSearch = ({ ...props }) => {
             toast({
                 title: 'Started Quote',
                 description: 'You started your quote! Now add some products!',
+                className: 'bg-slate-200 text-slate-900',
             });
         },
     });
@@ -85,7 +89,7 @@ export const SelectSearch = ({ ...props }) => {
                                       option.storeName.toUpperCase() ===
                                       name.toUpperCase()
                               )?.storeName
-                            : 'Select framework...'}
+                            : 'Select Dealer...'}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
@@ -124,6 +128,14 @@ export const SelectSearch = ({ ...props }) => {
                     </Command>
                 </PopoverContent>
             </Popover>
+            <Input
+                placeholder="Reference Number"
+                value={refNum}
+                className="bg-slate-200 text-slate-900"
+                onChange={(e) => {
+                    setRefNum(e.target.value);
+                }}
+            />
             <Button isLoading={isLoading} onClick={() => createQuote()}>
                 Start Quote
             </Button>

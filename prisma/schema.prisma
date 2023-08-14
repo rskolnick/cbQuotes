@@ -64,12 +64,13 @@ model Dealer {
 }
 
 model Quote {
-  id        String    @id @default(cuid())
-  dealer    Dealer    @relation(fields: [dealerId], references: [id])
-  dealerId  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  products  Product[]
+  id           String    @id @default(cuid())
+  referenceNum String
+  dealer       Dealer    @relation(fields: [dealerId], references: [id])
+  dealerId     String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  products     Product[]
 
   @@index([dealerId])
 }

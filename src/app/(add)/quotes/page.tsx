@@ -7,5 +7,14 @@ export default async function QuotesPage() {
         },
     });
 
-    return <div>{quotes.map((quote) => quote.dealer.storeName)}</div>;
+    return (
+        <div>
+            {quotes.map((quote) => (
+                <div key={quote.id}>
+                    <h1 className="text-2xl">{quote.dealer.storeName}</h1>
+                    <p>Reference Number: {quote.referenceNum}</p>
+                </div>
+            ))}
+        </div>
+    );
 }

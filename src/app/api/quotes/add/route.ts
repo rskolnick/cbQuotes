@@ -5,7 +5,7 @@ export async function POST(req: Request) {
         // TODO: Make sure we are signed in
 
         const body = await req.json();
-        const { id } = body;
+        const { id, refNum } = body;
 
         const dealerExists = await db.dealer.findFirst({
             where: {
@@ -22,6 +22,7 @@ export async function POST(req: Request) {
         await db.quote.create({
             data: {
                 dealerId: id,
+                referenceNum: refNum,
             },
         });
 
