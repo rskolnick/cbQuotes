@@ -19,9 +19,9 @@ export default async function QuotesPage() {
                             className="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110 p-6 rounded"
                         >
                             <Link href={`/quotes/${quote.id}`}>
-                                <h1 className="text-2xl">
+                                <h3 className="text-2xl">
                                     {quote.dealer.storeName}
-                                </h1>
+                                </h3>
                                 <div className="flex items-center">
                                     <p>{quote.referenceNum}</p>
                                 </div>

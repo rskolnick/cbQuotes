@@ -1,5 +1,7 @@
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { db } from '@/lib/db';
+import Link from 'next/link';
 
 type Props = {
     params: {
@@ -60,6 +62,12 @@ export default async function page({ params }: Props) {
                         ))}
                     </div>
                 </section>
+                <Link
+                    className={buttonVariants()}
+                    href={`/quotes/${id}/addproducts`}
+                >
+                    Add Products
+                </Link>
             </div>
         </div>
     );
