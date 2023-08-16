@@ -10,6 +10,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/lib/db";
 import Link from "next/link";
+import { DataTable } from "./components/data-table";
+import { columns } from "./components/columns";
 
 type Props = {
 	params: {
@@ -41,6 +43,8 @@ export default async function page({ params }: Props) {
 			</div>
 		);
 	}
+
+	const products = await db.product.findMany();
 
 	return (
 		<div className='container'>
@@ -81,7 +85,9 @@ export default async function page({ params }: Props) {
 								Add products to the quote.
 							</DialogDescription>
 						</DialogHeader>
-						<div className='grid gap-4 py-4'></div>
+						<div className='grid gap-4 py-4'>
+							<DataTable columns={columns} data={products} />
+						</div>
 					</DialogContent>
 				</Dialog>
 			</div>
