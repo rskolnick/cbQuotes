@@ -17,6 +17,17 @@ export const columns: ColumnDef<Products>[] = [
 	},
 	{
 		accessorKey: "msrp",
-		header: "MSRP",
+		header: () => <div className='text-right'>MSRP</div>,
+		cell: ({ row }) => {
+			const msrp = parseFloat(row.getValue("msrp"));
+			const formattedMsrp = new Intl.NumberFormat("en-US", {
+				style: "currency",
+				currency: "USD",
+			}).format(msrp);
+
+			return (
+				<div className='text-right font-medium'>{formattedMsrp}</div>
+			);
+		},
 	},
 ];
