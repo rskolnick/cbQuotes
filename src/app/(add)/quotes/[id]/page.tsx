@@ -1,5 +1,12 @@
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/lib/db";
 import Link from "next/link";
@@ -63,13 +70,20 @@ export default async function page({ params }: Props) {
 						))}
 					</div>
 				</section>
-				<Dialog></Dialog>
-				<Link
-					className={buttonVariants()}
-					href={`/quotes/${id}/addproducts`}
-				>
-					Add Products
-				</Link>
+				<Dialog>
+					<DialogTrigger asChild>
+						<Button>Add Products</Button>
+					</DialogTrigger>
+					<DialogContent>
+						<DialogHeader>
+							<DialogTitle>Add Products to Quote</DialogTitle>
+							<DialogDescription>
+								Add products to the quote.
+							</DialogDescription>
+						</DialogHeader>
+						<div className='grid gap-4 py-4'></div>
+					</DialogContent>
+				</Dialog>
 			</div>
 		</div>
 	);
