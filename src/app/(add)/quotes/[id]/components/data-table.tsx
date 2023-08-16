@@ -33,6 +33,7 @@ export function DataTable<TData, TValue>({
 	data,
 }: DataTableProps<TData, TValue>) {
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+	const [rowSelection, setRowSelection] = useState({});
 
 	const table = useReactTable({
 		data,
@@ -41,8 +42,10 @@ export function DataTable<TData, TValue>({
 		getPaginationRowModel: getPaginationRowModel(),
 		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
+		onRowSelectionChange: setRowSelection,
 		state: {
 			columnFilters,
+			rowSelection,
 		},
 	});
 
@@ -88,7 +91,7 @@ export function DataTable<TData, TValue>({
 							</TableRow>
 						))}
 					</TableHeader>
-					<TableBody>
+					<TableBody className='bg-slate-500'>
 						{table.getRowModel().rows?.length ? (
 							table.getRowModel().rows.map((row) => (
 								<TableRow
@@ -98,7 +101,10 @@ export function DataTable<TData, TValue>({
 									}
 								>
 									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
+										<TableCell
+											key={cell.id}
+											className='bg-slate-400'
+										>
 											{flexRender(
 												cell.column.columnDef.cell,
 												cell.getContext()
