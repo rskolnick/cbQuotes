@@ -12,6 +12,8 @@ import { db } from '@/lib/db';
 import Link from 'next/link';
 import { DataTable } from './components/data-table';
 import { columns } from './components/columns';
+import { Minus } from 'lucide-react';
+import { DeleteButton } from './components/delete-button';
 
 type Props = {
     params: {
@@ -70,6 +72,9 @@ export default async function page({ params }: Props) {
                                     <p>${productOnQuote.product.msrp}</p>
                                     <p>x {productOnQuote.quantity}</p>
                                 </div>
+                                <DeleteButton
+                                    productId={productOnQuote.productId}
+                                />
                             </div>
                         ))}
                     </div>

@@ -28,6 +28,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
+import { toast } from '@/hooks/use-toast';
+import { useParams, useRouter } from 'next/navigation';
 
 export function DataTable<TData, TValue>({
     columns,
@@ -36,13 +39,47 @@ export function DataTable<TData, TValue>({
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
 
-    const {} = useMutation({
+    const router = useRouter();
+    const params = useParams();
+
+    const { mutate: addProductsToQuote, isLoading } = useMutation({
         mutationFn: async () => {
-            const payload: any = [];
+            const payload: any = [{ quoteId: params.id }];
             table.getRowModel().rows.map((row) => {
                 if (row.getIsSelected()) {
                     payload.push(row.original);
                 }
+            });
+
+            const { data } = await axios.patch(
+                '/api/quotes/add/products',
+                payload
+            );
+            return data as string;
+        },
+        onError: (err) => {
+            if (err instanceof AxiosError) {
+                if (err.response?.status === 409) {
+                    return toast({
+                        title: 'Edit Existing Quote',
+                        description:
+                            'You are trying to edit a quote that does not exist.',
+                        variant: 'destructive',
+                    });
+                }
+            }
+            return toast({
+                title: 'Error updating product',
+                description: `${err}`,
+                variant: 'destructive',
+            });
+        },
+        onSuccess: () => {
+            router.refresh();
+            router.push(`/quotes/${params.id}`);
+            toast({
+                title: 'Success!',
+                description: 'Successfully added products to quote',
             });
         },
     });
@@ -158,15 +195,18 @@ export function DataTable<TData, TValue>({
             </div>
             <Button
                 className="w-full"
+                isLoading={isLoading}
                 onClick={() => {
-                    // const payload: any = [];
-                    // table.getRowModel().rows.map((row) => {
-                    //     if (row.getIsSelected()) {
-                    //         console.log(row.original);
-                    //         payload.push(row.original);
-                    //     }
-                    // });
-                    // console.log(payload);
+                    const selectedRows = [];
+                    table.getRowModel().rows.map((row) => {
+                        if (row.getIsSelected()) {
+                            selectedRows.push(row);
+                        }
+                    });
+
+                    if (selectedRows.length > 0) {
+                        addProductsToQuote();
+                    }
                 }}
             >
                 Add Products
