@@ -1,4 +1,5 @@
 import { db } from '@/lib/db';
+import { disconnect } from 'process';
 
 export async function PATCH(req: Request) {
     try {
@@ -34,36 +35,16 @@ export async function PATCH(req: Request) {
             });
         }
 
-        console.log(productOnQuoteExists);
-
-        await db.productsOnQuote.update({
-            where: {
-                quoteId_productId: {
-                    quoteId,
-                    productId,
+        if (productOnQuoteExists.quantity <= 1) {
+            await db.productsOnQuote.delete({
+                where: {
+                    quoteId_productId: {
+                        quoteId,
+                        productId,
+                    },
                 },
-            },
-            data: {
-                quantity: {
-                    decrement: 1,
-                },
-            },
-        });
-
-        const newProdOnQuote = await db.productsOnQuote.findUnique({
-            where: {
-                quoteId_productId: {
-                    quoteId,
-                    productId,
-                },
-            },
-        });
-
-        console.log(newProdOnQuote);
-
-        // NEED TO FINISH
-
-        if (newProdOnQuote?.quantity === 0) {
+            });
+        } else {
             await db.productsOnQuote.update({
                 where: {
                     quoteId_productId: {
@@ -72,7 +53,9 @@ export async function PATCH(req: Request) {
                     },
                 },
                 data: {
-                    product: {},
+                    quantity: {
+                        decrement: 1,
+                    },
                 },
             });
         }

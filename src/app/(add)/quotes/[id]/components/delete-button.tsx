@@ -14,9 +14,11 @@ export const DeleteButton = ({ productId }: { productId: string }) => {
     const { mutate: deleteProdFromQuote } = useMutation({
         mutationFn: async () => {
             const payload = {
-                quoteId: params.quoteId,
+                quoteId: params.id,
                 productId,
             };
+
+            console.log(payload.quoteId);
 
             const { data } = await axios.patch(
                 '/api/quotes/remove/products',
