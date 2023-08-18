@@ -14,6 +14,7 @@ import { DataTable } from './components/data-table';
 import { columns } from './components/columns';
 import { Minus } from 'lucide-react';
 import { DeleteButton } from './components/delete-button';
+import { AddButton } from './components/add-button';
 
 type Props = {
     params: {
@@ -71,8 +72,17 @@ export default async function page({ params }: Props) {
                                 <div className="flex items-center justify-center gap-6 text-slate-400">
                                     <p>${productOnQuote.product.msrp}</p>
                                     <p>x {productOnQuote.quantity}</p>
+                                    <p>
+                                        $
+                                        {productOnQuote.product.msrp *
+                                            productOnQuote.quantity}
+                                    </p>
                                 </div>
+
                                 <DeleteButton
+                                    productId={productOnQuote.productId}
+                                />
+                                <AddButton
                                     productId={productOnQuote.productId}
                                 />
                             </div>

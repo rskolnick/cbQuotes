@@ -34,30 +34,19 @@ export async function PATCH(req: Request) {
             });
         }
 
-        if (productOnQuoteExists.quantity <= 1) {
-            await db.productsOnQuote.delete({
-                where: {
-                    quoteId_productId: {
-                        quoteId,
-                        productId,
-                    },
+        await db.productsOnQuote.update({
+            where: {
+                quoteId_productId: {
+                    quoteId,
+                    productId,
                 },
-            });
-        } else {
-            await db.productsOnQuote.update({
-                where: {
-                    quoteId_productId: {
-                        quoteId,
-                        productId,
-                    },
+            },
+            data: {
+                quantity: {
+                    increment: 1,
                 },
-                data: {
-                    quantity: {
-                        decrement: 1,
-                    },
-                },
-            });
-        }
+            },
+        });
 
         return new Response('OK');
     } catch (error) {
