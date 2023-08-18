@@ -61,7 +61,6 @@ export async function PATCH(req: Request) {
 
         return new Response('OK');
     } catch (error) {
-        console.log(error);
         return new Response('Unknown error', { status: 500 });
     }
 }

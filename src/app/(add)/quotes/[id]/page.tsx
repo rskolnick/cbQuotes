@@ -9,12 +9,11 @@ import {
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { db } from '@/lib/db';
-import Link from 'next/link';
 import { DataTable } from './components/data-table';
 import { columns } from './components/columns';
-import { Minus } from 'lucide-react';
-import { DeleteButton } from './components/delete-button';
+import { DecrementButton } from './components/decrement-button';
 import { AddButton } from './components/add-button';
+import { DeleteButton } from './components/delete-button';
 
 type Props = {
     params: {
@@ -79,10 +78,13 @@ export default async function page({ params }: Props) {
                                     </p>
                                 </div>
 
-                                <DeleteButton
+                                <DecrementButton
                                     productId={productOnQuote.productId}
                                 />
                                 <AddButton
+                                    productId={productOnQuote.productId}
+                                />
+                                <DeleteButton
                                     productId={productOnQuote.productId}
                                 />
                             </div>
