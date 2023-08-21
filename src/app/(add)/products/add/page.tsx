@@ -74,7 +74,7 @@ export default function AddProductsPage() {
             });
         },
         onSuccess: () => {
-            router.push('/products');
+            router.push(`/products/${productName}/parts`);
             router.refresh();
         },
     });

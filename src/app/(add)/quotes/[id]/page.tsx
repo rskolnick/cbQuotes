@@ -85,6 +85,13 @@ export default async function page({ params }: Props) {
         );
     }
 
+    const totalPrice = quote.products
+        .map((item) => {
+            const price = item.product.msrp * item.quantity;
+            return price;
+        })
+        .reduce((partialSum, a) => partialSum + a, 0);
+
     return (
         <div className="container">
             <div className="flex items-center justify-between flex-wrap">
@@ -128,6 +135,10 @@ export default async function page({ params }: Props) {
                         ))}
                     </div>
                 </section>
+            </div>
+            <Separator className="text-slate-400" />
+            <div className="flex items-center justify-normal gap-6 flex-wrap text-lg pl-[11.6rem]">
+                <p>${totalPrice}</p>
             </div>
             <Dialog>
                 <DialogTrigger asChild>
