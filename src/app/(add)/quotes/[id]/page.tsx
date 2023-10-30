@@ -14,6 +14,7 @@ import { columns } from './components/columns';
 import { DecrementButton } from './components/decrement-button';
 import { AddButton } from './components/add-button';
 import { DeleteButton } from './components/delete-button';
+import { PrintQuote } from './components/print-quote';
 
 type Props = {
     params: {
@@ -140,6 +141,7 @@ export default async function page({ params }: Props) {
             <div className="flex items-center justify-normal gap-6 flex-wrap text-lg pl-[11.6rem]">
                 <p>${totalPrice}</p>
             </div>
+            <PrintQuote quote={quote} />
             <Dialog>
                 <DialogTrigger asChild>
                     <Button className="mt-6">Add Products</Button>
